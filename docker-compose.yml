@@ -1,0 +1,41 @@
+services:
+  contacorrente-api:
+    build:
+      context: .
+      dockerfile: src/ContaCorrente/ContaCorrente.API/Dockerfile
+    container_name: bankmore-contacorrente-api
+    ports:
+      - "5001:8080"
+    environment:
+      ASPNETCORE_URLS: "http://+:8080"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DatabaseSettings__ConnectionString: "Data Source=/data/contacorrente.db"
+      JwtSettings__Issuer: "BankMore"
+      JwtSettings__Audience: "BankMore"
+      JwtSettings__SecretKey: "MINHA_CHAVE_SUPER_SECRETA_PARA_TESTES_123456"
+    volumes:
+      - contacorrente-data:/data
+
+  transferencia-api:
+    build:
+      context: .
+      dockerfile: src/Transferencia/Transferencia.API/Dockerfile
+    container_name: bankmore-transferencia-api
+    ports:
+      - "5002:8080"
+    environment:
+      ASPNETCORE_URLS: "http://+:8080"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DatabaseSettings__ConnectionString: "Data Source=/data/transferencia.db"
+      ContaCorrenteApi__BaseUrl: "http://contacorrente-api:8080"
+      JwtSettings__Issuer: "BankMore"
+      JwtSettings__Audience: "BankMore"
+      JwtSettings__SecretKey: "MINHA_CHAVE_SUPER_SECRETA_PARA_TESTES_123456"
+    volumes:
+      - transferencia-data:/data
+    depends_on:
+      - contacorrente-api
+
+volumes:
+  contacorrente-data:
+  transferencia-data:
