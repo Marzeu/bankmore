@@ -1,0 +1,61 @@
+# =========================
+# .NET
+# =========================
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider / VS Code / Visual Studio
+.vs/
+.idea/
+.vscode/
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# SQLite / Banco de dados
+# =========================
+*.db
+*.sqlite
+*.sqlite3
+
+# =========================
+# Docker
+# =========================
+DockerDesktop*
+docker-compose.override.yml
+
+# =========================
+# OS (Windows / Mac)
+# =========================
+Thumbs.db
+.DS_Store
+
+# =========================
+# Testes
+# =========================
+TestResults/
+coverage/
+*.coverage
+
+# =========================
+# Publish
+# =========================
+publish/
+out/
+
+# =========================
+# Secrets / config local
+# =========================
+appsettings.Development.json
+.env
+
+# arquivos locais (não subir)
+contas.txt
+exemplos.txt
