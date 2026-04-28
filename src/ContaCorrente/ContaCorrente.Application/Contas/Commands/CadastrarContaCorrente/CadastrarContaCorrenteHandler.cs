@@ -1,25 +1,27 @@
-﻿using MediatR;
-using ContaCorrente.Domain.Entities;
+﻿using ContaCorrente.Application.Common.Security;
 using ContaCorrente.Application.Contas.Repositories;
+using ContaCorrente.Domain.Entities;
+using MediatR;
 
 namespace ContaCorrente.Application.Contas.Commands.CadastrarContaCorrente;
 
 public class CadastrarContaCorrenteHandler : IRequestHandler<CadastrarContaCorrenteCommand, int>
 {
     private readonly IContaCorrenteRepository _repository;
+    private readonly PasswordService _passwordService;
 
-    public CadastrarContaCorrenteHandler(IContaCorrenteRepository repository)
+    public CadastrarContaCorrenteHandler(IContaCorrenteRepository repository, PasswordService passwordService)
     {
         _repository = repository;
+        _passwordService = passwordService;
     }
 
     public async Task<int> Handle(
         CadastrarContaCorrenteCommand request,
         CancellationToken cancellationToken)
-    {
-        // TODO: usar hash real (SHA256 ou BCrypt)
+    {        
         var salt = Guid.NewGuid().ToString();
-        var senhaHash = request.Senha;
+        var senhaHash = _passwordService.HashPassword(request.Senha);
 
         var conta = new Domain.Entities.ContaCorrente(
             request.Nome,

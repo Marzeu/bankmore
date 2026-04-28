@@ -1,10 +1,13 @@
 ﻿using ContaCorrente.Application.Common;
 using ContaCorrente.Application.Common.Errors;
 using ContaCorrente.Application.Common.Exceptions;
+using ContaCorrente.Application.Common.Security;
+using ContaCorrente.Application.Contas.Commands.Login;
 using ContaCorrente.Application.Contas.Dtos;
 using ContaCorrente.Application.Contas.Repositories;
 using ContaCorrente.Application.Movimentos.Commands.MovimentarConta;
 using Moq;
+
 
 namespace ContaCorrente.Tests.Application.Movimentos;
 
@@ -144,6 +147,7 @@ public class MovimentarContaHandlerTests
         Assert.Equal(HttpStatus.BadRequest, exception.StatusCode);
     }
 
+    
     private static MovimentarContaCommand CriarCommand(
         int numeroConta = 1001,
         int numeroContaLogada = 1001,

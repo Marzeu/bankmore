@@ -1,4 +1,6 @@
 ﻿using ContaCorrente.Application.Auth;
+using ContaCorrente.Application.Common.Errors;
+using ContaCorrente.Application.Common.Security;
 using ContaCorrente.Application.Contas.Repositories;
 using MediatR;
 
@@ -8,11 +10,16 @@ public class LoginHandler : IRequestHandler<LoginCommand, string>
 {
     private readonly IContaCorrenteRepository _repository;
     private readonly ITokenService _tokenService;
+    private readonly PasswordService _passwordService;
 
-    public LoginHandler(IContaCorrenteRepository repository, ITokenService tokenService)
+    public LoginHandler(
+        IContaCorrenteRepository repository,
+        ITokenService tokenService,
+        PasswordService passwordService)
     {
         _repository = repository;
         _tokenService = tokenService;
+        _passwordService = passwordService;
     }
 
     public async Task<string> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -20,10 +27,15 @@ public class LoginHandler : IRequestHandler<LoginCommand, string>
         var conta = await _repository.ObterParaLogin(request.DocumentoOuNumero);
 
         if (conta is null)
-            throw new UnauthorizedAccessException("Usuário não autorizado.");
+            throw new UnauthorizedAccessException(ErrorMessages.UserUnauthorized);
 
-        if (conta.SenhaHash != request.Senha)
-            throw new UnauthorizedAccessException("Usuário não autorizado.");
+        var senhaValida = _passwordService.VerifyPassword(
+            conta.SenhaHash,
+            request.Senha
+        );
+
+        if (!senhaValida)
+            throw new UnauthorizedAccessException(ErrorMessages.UserUnauthorized);
 
         return _tokenService.Generate(Guid.Parse(conta.IdContaCorrente), conta.Numero);
     }

@@ -1,19 +1,20 @@
+using ContaCorrente.API.Middlewares;
+using ContaCorrente.Application.Auth;
+using ContaCorrente.Application.Common.Behaviors;
+using ContaCorrente.Application.Common.Errors;
+using ContaCorrente.Application.Common.Security;
 using ContaCorrente.Application.Contas.Commands.CadastrarContaCorrente;
 using ContaCorrente.Application.Contas.Repositories;
+using ContaCorrente.Infrastructure.Auth;
 using ContaCorrente.Infrastructure.Configurations;
 using ContaCorrente.Infrastructure.Data;
 using ContaCorrente.Infrastructure.Repositories;
 using FluentValidation;
 using MediatR;
-using ContaCorrente.Application.Common.Behaviors;
-using ContaCorrente.API.Middlewares;
-using ContaCorrente.Application.Auth;
-using ContaCorrente.Infrastructure.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.OpenApi.Models;
-using ContaCorrente.Application.Common.Errors;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +26,7 @@ builder.Services.Configure<DatabaseSettings>(
 
 // DI
 builder.Services.AddScoped<IContaCorrenteRepository, ContaCorrenteRepository>();
+builder.Services.AddScoped<PasswordService>();
 
 // Controllers + Swagger
 builder.Services.AddControllers();

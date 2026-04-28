@@ -12,4 +12,7 @@ public static class ErrorMessages
 
     public const string TokenInvalidOrExpired = "Token inválido ou expirado.";    
     public const string InvalidCredentials = "Usuário ou senha inválidos.";
+
+    public const string DocumentOrAccountRequired = "Documento ou número da conta é obrigatório.";    
+    public const string PasswordRequired = "Senha é obrigatória.";  
 }
